@@ -1,0 +1,63 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "preLaunchTask": "${defaultBuildTask}",
+            "type": "probe-rs-debug",
+            "request": "launch",
+            "name": "Debug (Probe-RS)",
+            "cwd": "${workspaceFolder}",
+            "connectUnderReset": true,
+            "chip": "STM32WB55RG",
+            "flashingConfig": {
+              "flashingEnabled": true,
+            },
+            "coreConfigs": [
+              {
+                "rttEnabled": true,
+                "programBinary": "./target/thumbv7em-none-eabihf/debug/gatt-server"
+              }
+            ],
+            "consoleLogLevel": "Debug"
+        },
+        {
+            /* Configuration for the STM32F303 Discovery board */
+            "type": "cortex-debug",
+            "request": "launch",
+            "name": "Debug (OpenOCD)",
+            "servertype": "openocd",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Cargo Build (debug)",
+            "runToEntryPoint": "main",
+            "executable": "./target/thumbv7em-none-eabihf/debug/gatt-server",
+            /* Run `cargo build --example itm` and uncomment this line to run itm example */
+            "device": "STM32WB55RGV6",
+            "configFiles": [
+                "interface/stlink-v2-1.cfg",
+                "target/stm32f3x.cfg"
+            ],
+            "swoConfig": {
+                "enabled": true,
+                "cpuFrequency": 8000000,
+                "swoFrequency": 2000000,
+                "source": "probe",
+                "decoders": [
+                    { "type": "console", "label": "ITM", "port": 0 }
+                ]
+            }
+        },
+        {
+            "type": "cortex-debug",
+            "request": "launch",
+            "name": "Debug (QEMU)",
+            "servertype": "qemu",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Cargo Build (debug)",
+            "runToEntryPoint": "main",
+            "executable": "./target/thumbv7m-none-eabi/debug/gatt-server",
+            /* Run `cargo build --example hello` and uncomment this line to run semi-hosting example */
+            "cpu": "cortex-m3",
+            "machine": "lm3s6965evb",
+        }
+    ]
+}

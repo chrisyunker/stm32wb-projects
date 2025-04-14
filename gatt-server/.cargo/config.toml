@@ -1,0 +1,17 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = [
+  "probe-rs",
+  "run",
+  "--chip",
+  "STM32WB55RG",
+  "--connect-under-reset",
+  "--log-format",
+  "{t} {[{L}]%bold} {s}"
+
+]
+
+[build]
+target = "thumbv7em-none-eabihf"     # Cortex-M4F and Cortex-M7F (with FPU)
+
+[env]
+DEFMT_LOG = "debug"
